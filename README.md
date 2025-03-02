@@ -3,7 +3,6 @@
 Laravel stater kit for API Service Development with CRUD Generation, API Service Configuration, Etc. with laravel light save your time just for more creative thinking.
 
 <br>
-<br>
 
 ## Version Laravel ^ 12
 
@@ -12,6 +11,6 @@ Laravel stater kit for API Service Development with CRUD Generation, API Service
 <br>
 <br>
 
-========================================= <br>
-creative by: [SEJE Digital](https://sejedigital.com) <br>
-========================================= <br>
+========================= <br>
+Creative by: [SEJE Digital](https://sejedigital.com) <br>
+========================= <br>
