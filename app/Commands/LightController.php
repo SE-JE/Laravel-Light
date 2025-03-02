@@ -11,7 +11,7 @@ class LightController extends Command
      *
      * @var string
      */
-    protected $signature = 'make:light-controller {name} {--model=}';
+    protected $signature = 'light:controller {name} {--model=}';
 
     /**
      * The console command description.
@@ -52,8 +52,8 @@ class LightController extends Command
         $stub = file_get_contents(resource_path('stubs/light-controller.stub'));
 
         $stub = str_replace(
-            ['{{ namespace }}', '{{ name }}', '{{ model }}'],
-            [$folder ? "\\" . $folder : "", $name, $model],
+            ['{{ namespace }}', '{{ name }}', '{{ model }}', '{{ with }}', '{{ validations }}'],
+            [$folder ? "\\" . $folder : "", $name, $model, '', ''],
             $stub
         );
 

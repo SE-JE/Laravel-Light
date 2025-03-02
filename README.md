@@ -11,6 +11,33 @@ Laravel stater kit for API Service Development with CRUD Generation, API Service
 <br>
 <br>
 
+## Magic Command
+
+### Make Laravel Light Controller
+
+```
+php artisan light:controller {name} --model={model[optional]}
+```
+
+### Make Laravel Light Model
+
+```
+php artisan light:model {name}
+```
+
+### Make Laravel Light Entity
+
+```
+php artisan light:make-entity {name}
+```
+
+### Generate Resources From Entities
+
+```
+php artisan light:entity {name[optional]}
+```
+
+
 ========================= <br>
 Creative by: [SEJE Digital](https://sejedigital.com) <br>
 ========================= <br>

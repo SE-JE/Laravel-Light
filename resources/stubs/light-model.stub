@@ -12,20 +12,26 @@ class {{ name }} extends Model
     // =========================>
     // ## Fillable
     // =========================>
-    protected $fillable = [];
+    protected $fillable = [{{ fillable }}];
 
     // =========================>
     // ## Hidden
     // =========================>
-    protected $hidden = [];
+    protected $hidden = [{{ hidden }}];
 
     // =========================>
     // ## Searchable
     // =========================>
-    public $searchable = [];
+    public $searchable = [{{ searchable }}];
 
     // =========================>
     // ## Selectable
     // =========================>
-    public $selectable = [];
+    public $selectable = [{{ selectable }}];
+
+
+    // =========================>
+    // ## Relations
+    // =========================>
+{{ relations }}
 }

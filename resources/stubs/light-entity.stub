@@ -1,0 +1,19 @@
+<?php
+
+namespace App\Entities;
+
+use App\Helpers\LightGenerationHelper;
+
+class {{ name }}
+{
+    use LightGenerationHelper;
+    /**
+     * generation the application's entity.
+     */
+    public function run(): void
+    {
+        $this->entity([
+            // write entities
+        ]);
+    }
+}

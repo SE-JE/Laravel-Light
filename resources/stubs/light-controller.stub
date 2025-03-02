@@ -18,7 +18,7 @@ class {{ name }} extends Controller
         $params = $this->getParams($request);
 
         // ? Begin
-        $query = {{ model }}::query()
+        $query = {{ model }}::query(){{ with }}
             ->search($request->get("search", ''))
             ->filter(json_decode($params["filter"]))
             ->orderBy($params["sortBy"], $params["sortDirection"])
@@ -35,12 +35,7 @@ class {{ name }} extends Controller
     public function store(Request $request)
     {
         // ? Validate request
-        $this->validation($request->all(), [
-            'name' => 'required|string|max:100',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string|max:255',
-            'image' => 'nullable',
-        ]);
+        $this->validation($request->all(), [{{ validations }}]);
 
         // ? Initial
         DB::beginTransaction();
@@ -72,12 +67,7 @@ class {{ name }} extends Controller
         $model = {{ model }}::findOrFail($id);
 
         // ? Validate request
-        $this->validation($request->all(), [
-            'name' => 'required|string|max:100',
-            'price' => 'required|numeric',
-            'description' => 'nullable|string|max:255',
-            'image' => 'nullable',
-        ]);
+        $this->validation($request->all(), [{{ validations }}]);
 
         // ? Dump data
         $model->dumpField($request);
