@@ -1,0 +1,31 @@
+<?php
+
+namespace App\Models;
+
+use App\Helpers\LightModelHelper;
+use Illuminate\Database\Eloquent\Model;
+
+class {{ name }} extends Model
+{
+    use LightModelHelper;
+
+    // =========================>
+    // ## Fillable
+    // =========================>
+    protected $fillable = [];
+
+    // =========================>
+    // ## Hidden
+    // =========================>
+    protected $hidden = [];
+
+    // =========================>
+    // ## Searchable
+    // =========================>
+    public $searchable = [];
+
+    // =========================>
+    // ## Selectable
+    // =========================>
+    public $selectable = [];
+}
