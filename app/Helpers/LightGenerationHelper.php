@@ -139,7 +139,8 @@ trait LightGenerationHelper
     {
         $name = Str::snake(Str::pluralStudly($model));
         $base_path = 'database/migrations';
-        $filename =  '0000_create_' . $name;
+        $timestamp = date('Y_m_d_His');
+        $filename =  "{$timestamp}_create_{$name}_table";
 
         if (file_exists("$base_path/$filename.php")) {
             unlink("$base_path/$filename.php");
