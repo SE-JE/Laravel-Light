@@ -3,7 +3,10 @@
 namespace App\Commands;
 
 use App\Entities\BaseEntity;
+use App\Entities\StarterEntity;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 class LightEntity extends Command
 {
@@ -38,8 +41,16 @@ class LightEntity extends Command
                 $this->error("$runnerClass Entity Not Found!");
             }
         } else {
-            (new BaseEntity)->run();
-            $this->info("Successfully Generate All Entities");
+
+            $runChoice = $this->choice('Choose what you want to run?', ['Run Starter Entity', 'Run Registered Entity']);
+
+            if ($runChoice) {
+                (new StarterEntity)->run();
+                $this->info("Successfully Generate Starter Entities");
+            } else {
+                (new BaseEntity)->run();
+                $this->info("Successfully Generate Registered Entities");
+            }
         }
     }
 

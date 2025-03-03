@@ -142,8 +142,12 @@ trait LightGenerationHelper
         $timestamp = date('Y_m_d_His');
         $filename =  "{$timestamp}_create_{$name}_table";
 
-        if (file_exists("$base_path/$filename.php")) {
-            unlink("$base_path/$filename.php");
+        $existingMigration = glob("$base_path/*_create_{$name}_table.php");
+
+        if (!empty($existingMigration)) {
+            foreach ($existingMigration as $file) {
+                unlink($file);
+            }
         }
 
         $migrationFields = [];
