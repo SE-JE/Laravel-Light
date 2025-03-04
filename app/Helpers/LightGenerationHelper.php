@@ -18,17 +18,17 @@ trait LightGenerationHelper
     // =========================>
     // ## Call Entity Resources
     // =========================>
-    public function call($entities)
+    public function call($blueprints)
     {
-        foreach ($entities as $entity) {
-            (new $entity)->run();
+        foreach ($blueprints as $blueprint) {
+            (new $blueprint)->run();
         }
     }
 
     // =========================>
     // ## Entity Generation
     // =========================>
-    public function entity(array $structs)
+    public function blueprint(array $structs)
     {
         foreach ($structs as $struct) {
             $this->modelGeneration(

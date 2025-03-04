@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entities;
+namespace App\Blueprints;
 
 use App\Helpers\LightGenerationHelper;
 
-class BaseEntity
+class BaseBLueprint
 {
     use LightGenerationHelper;
     /**

@@ -25,16 +25,16 @@ php artisan light:controller {name} --model={model[optional]}
 php artisan light:model {name}
 ```
 
-### Make Laravel Light Entity
+### Make Laravel Light Blueprint
 
 ```
-php artisan light:make-entity {name}
+php artisan light:make-blueprint {name}
 ```
 
-### Generate Resources From Entities
+### Generate Resources From Blueprints
 
 ```
-php artisan light:entity {name[optional]}
+php artisan light:blueprint {name[optional]}
 ```
 
 

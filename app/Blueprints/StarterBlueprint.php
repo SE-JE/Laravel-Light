@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entities;
+namespace App\Blueprints;
 
 use App\Helpers\LightGenerationHelper;
 
-class StarterEntity
+class StarterBLueprint
 {
     use LightGenerationHelper;
     /**
@@ -12,7 +12,7 @@ class StarterEntity
      */
     public function run(): void
     {
-        $this->entity([
+        $this->blueprint([
             [
                 "model" => "FeatureGroup",
                 "schema" => [
