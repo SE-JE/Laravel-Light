@@ -31,6 +31,7 @@ trait LightGenerationHelper
     // =========================>
     public function blueprint(array $structs)
     {
+        $documentations = [];
         foreach ($structs as $struct) {
             $this->modelGeneration(
                 $struct['model'], 
@@ -54,17 +55,18 @@ trait LightGenerationHelper
                         );
                     }
 
-                    $this->documentationGeneration(
-                        $struct['controllers'], 
-                        isset($struct['schema']) ? $struct['schema'] : [],
-                        isset($struct['seeders']) ? $struct['seeders'] : [],
-                    );
+                    $documentations[] = ['controllers' => $struct['controllers'], 'schema' => $struct['schema'], 'seeders' => $struct['seeders']];
                 } else {
                     $this->controllerGeneration(
                         $struct['model'],
                         isset($struct['schema']) ? $struct['schema'] : [],
                         isset($struct['relations']) ? $struct['relations'] : [],
                     );
+
+                    $documentations[] = [
+                        "controllers" => [[Str::slug(Str::snake(Str::pluralStudly(str_replace('Controller', '', $struct['model'])), '-')) => null]],
+                        'schema' => $struct['schema'], 'seeders' => $struct['seeders']
+                    ];
                 }
             }
 
@@ -76,6 +78,10 @@ trait LightGenerationHelper
                 );
             }
         }
+
+        // foreach ($controllers as $controller) {
+            $this->documentationGeneration($documentations);
+        // }
     }
 
     // =========================>
@@ -341,7 +347,7 @@ trait LightGenerationHelper
     // =========================>
     // ## Light Documentation Generation
     // =========================>
-    private function documentationGeneration(array $controllers, array $schema = [], array $data = []){
+    private function documentationGeneration(array $documentations){
         $base_path = 'storage/documentation';
         $collectionName = getenv('APP_NAME') ?: 'API Collection';
         
@@ -355,41 +361,46 @@ trait LightGenerationHelper
         }
         
         $folders = [];
-        foreach ($controllers as $route => $controller) {
-            $folderName = explode('/', $controller)[0];
-            $schema = $schema ?? [];
 
-            $crudOperations = [
-                ['name' => "Get All $folderName", 'method' => 'GET', 'path' => "api/$route", 'body' => new stdClass()],
-                ['name' => "Create $folderName", 'method' => 'POST', 'path' => "api/$route", 'body' => $this->extractSchema($schema)],
-                ['name' => "Update $folderName", 'method' => 'PUT', 'path' => "api/$route/{id}", 'body' => $this->extractSchema($schema)],
-                ['name' => "Delete $folderName", 'method' => 'DELETE', 'path' => "api/$route/{id}", 'body' => new stdClass()],
-            ];
+        foreach ($documentations as $documentation) {
+            $controllers = $documentation['controllers'];
 
-            $items = [];
-            foreach ($crudOperations as $endpoint) {
-                $items[] = [
-                    'name' => $endpoint['name'],
-                    'request' => [
-                        'method' => $endpoint['method'],
-                        'header' => [],
-                        'body' => [
-                            'mode' => 'raw',
-                            'raw' => json_encode($endpoint['body'], JSON_PRETTY_PRINT),
+            foreach ($controllers as $route => $controller) {
+                $folderName = ucwords(str_replace('-', ' ', $route));
+                $schema = $documentation['schema'] ?? [];
+
+                $crudOperations = [
+                    ['name' => "Get All $folderName", 'method' => 'GET', 'path' => "$route", 'body' => new stdClass()],
+                    ['name' => "Create $folderName", 'method' => 'POST', 'path' => "$route", 'body' => $this->extractSchema($schema)],
+                    ['name' => "Update $folderName", 'method' => 'PUT', 'path' => "$route/{id}", 'body' => $this->extractSchema($schema)],
+                    ['name' => "Delete $folderName", 'method' => 'DELETE', 'path' => "$route/{id}", 'body' => new stdClass()],
+                ];
+
+                $items = [];
+                foreach ($crudOperations as $endpoint) {
+                    $items[] = [
+                        'name' => $endpoint['name'],
+                        'request' => [
+                            'method' => $endpoint['method'],
+                            'header' => [],
+                            'body' => [
+                                'mode' => 'raw',
+                                'raw' => json_encode($endpoint['body'], JSON_PRETTY_PRINT),
+                            ],
+                            'url' => [
+                                'raw' => '{{base_url}}/' . $endpoint['path'],
+                                'host' => ['{{base_url}}'],
+                                'path' => explode('/', $endpoint['path']),
+                            ],
                         ],
-                        'url' => [
-                            'raw' => '{{base_url}}/' . $endpoint['path'],
-                            'host' => ['{{base_url}}'],
-                            'path' => explode('/', $endpoint['path']),
-                        ],
-                    ],
+                    ];
+                }
+
+                $folders[] = [
+                    "name" => $folderName,
+                    "items" => $items,
                 ];
             }
-
-            $folders[] = [
-                "name" => $folderName,
-                "items" => $items,
-            ];
         }
         
         $collection = json_encode([

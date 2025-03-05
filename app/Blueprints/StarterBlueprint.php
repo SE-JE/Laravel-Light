@@ -53,7 +53,7 @@ class StarterBLueprint
             [
                 "model" => "FeatureAccess",
                 "schema" => [
-                    "feature_id" => 'type:bigInteger foreignIdFor:Feature index',
+                    "feature_id" => 'type:bigInteger foreignIdFor:Feature selectable index',
                     "code" => "type:string maxLength:2 required fillable searchable selectable index",
                     "name" => "type: string maxLength:20 required fillable searchable selectable",
                 ],
