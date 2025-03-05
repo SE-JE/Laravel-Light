@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class {{ name }}Seeder extends Seeder
 {
     /**
      * Seed the application's database.
      */
     public function run(): void
     {
-        $this->call([
-            //
+        \App\Models\{{ name }}::insert([
+            {{ seeders }}
         ]);
     }
 }

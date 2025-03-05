@@ -60,6 +60,14 @@ trait LightGenerationHelper
                     );
                 }
             }
+
+            if(isset($struct['seeders']) && count($struct['seeders'])) {
+                $this->seederGeneration(
+                    $struct['model'],
+                    isset($struct['schema']) ? $struct['schema'] : [],
+                    isset($struct['seeders']) ? $struct['seeders'] : [],
+                );
+            }
         }
     }
 
@@ -291,6 +299,34 @@ trait LightGenerationHelper
 
             file_put_contents($routeFile, $fileContent);
         }
+
+        return true;
+    }
+
+    // =========================>
+    // ## Light Seeder Generation
+    // =========================>
+    private function seederGeneration(string $model, array $schema = [], array $data = [])
+    {
+        $base_path = 'database/seeders';
+        
+        if (file_exists("$base_path/".$model."Seeder.php")) {
+            unlink("$base_path/".$model."Seeder.php");
+        }
+
+        $schemaKeys = array_keys($schema);
+
+        $stub = file_get_contents(resource_path('stubs/light-seeder.stub'));
+
+        $seeders = implode(",\n            ", array_map(fn($row) => "[" . implode(", ", array_map(fn($val, $index) => "'{$schemaKeys[$index]}' => " . (is_numeric($val) ? $val : "'$val'"), $row, array_keys($row))) . "]", $data));
+
+        $stub = str_replace(
+            ['{{ name }}', '{{ seeders }}'],
+            [$model, $seeders],
+            $stub
+        );
+
+        file_put_contents("$base_path/".$model."Seeder.php", $stub);
 
         return true;
     }

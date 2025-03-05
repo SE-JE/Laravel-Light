@@ -24,6 +24,10 @@ class StarterBLueprint
                 "controllers" => [
                     "group-features" => "Feature/GroupFeatureController",
                 ],
+                'seeders' => [
+                    ['Dashboard'], 
+                    ['Pengguna'],
+                ],
             ],
             [
                 "model" => "Feature",
@@ -40,12 +44,17 @@ class StarterBLueprint
                 "controllers" => [
                     "features" => "Feature/FeatureController",
                 ],
+                'seeders' => [
+                    [1, '001', 'Dashboard', 'Halaman Dashboard'],
+                    [2, '002', 'Manajemen Pengguna', 'Halaman Manajemen Pengguna'],
+                    [2, '003', 'Manajemen Role', 'Halaman Manajemen Role'],
+                ],
             ],
             [
                 "model" => "FeatureAccess",
                 "schema" => [
                     "feature_id" => 'type:bigInteger foreignIdFor:Feature index',
-                    "code" => "type:string maxLength:2 unique required fillable searchable selectable index",
+                    "code" => "type:string maxLength:2 required fillable searchable selectable index",
                     "name" => "type: string maxLength:20 required fillable searchable selectable",
                 ],
                 'relations' => [
@@ -53,6 +62,15 @@ class StarterBLueprint
                 ],
                 "controllers" => [
                     "feature-accesses" => "Feature/FeatureAccessController",
+                ],
+                'seeders' => [
+                    [1, '1', 'Melihat'],
+                    [2, '1', 'Melihat'],
+                    [2, '2', 'Membuat'],
+                    [2, '3', 'Mengubah'],
+                    [2, '4', 'Menghapus'],
+                    [3, '1', 'Melihat'],
+                    [3, '2', 'Mengubah'],
                 ],
             ],
         ]);
