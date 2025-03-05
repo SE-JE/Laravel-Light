@@ -19,7 +19,7 @@ class {{ name }} extends Controller
 
         // ? Begin
         $query = {{ model }}::query(){{ with }}
-            ->search($request->get("search", ''))
+            ->search($params["search"] || '')
             ->filter(json_decode($params["filter"]))
             ->orderBy($params["sortBy"], $params["sortDirection"])
             ->selectableColumns()

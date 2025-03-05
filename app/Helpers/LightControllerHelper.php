@@ -19,6 +19,7 @@ trait LightControllerHelper
             'sortBy'        => $request->get('sortBy', 'created_at'),
             'paginate'      => $request->get('paginate', 10),
             'filter'        => $request->get('filter', null),
+            'search'        => $request->get('search', null),
         ];
     }
 
@@ -35,8 +36,7 @@ trait LightControllerHelper
             response()->json([
                 'message' => "Error: Unprocessable Entity!",
                 'errors' => $validate->errors(),
-            ], 422)->send();
-            exit;
+            ], 422)->throwResponse();
         }
     }
 
@@ -53,14 +53,13 @@ trait LightControllerHelper
                 'message' => $message ?? "Error: Server Side Having Problem!",
                 'error' => $error ?? 'unknown',
                 'section' => $section ?? 'unknown',
-            ], 500)->send();
+            ], 500)->throwResponse();
             
         } else {
             response()->json([
                 'message' => $message ?? "Error: Server Side Having Problem!",
-            ], 500)->send();
+            ], 500)->throwResponse();
         }
-        exit;
     }
 
     // =========================>
@@ -77,8 +76,7 @@ trait LightControllerHelper
             'data' => $data ?? [],
             'total_row' => $totalRow ?? null,
             'columns' => $columns ?? null,
-        ], count($data) ? 200 : 206)->send();
-        exit;
+        ], count($data) ? 200 : 206)->throwResponse();
     }
 
     // =========================>
@@ -91,8 +89,7 @@ trait LightControllerHelper
         response()->json([
             'message' => $message ?? 'Success',
             'data' => $data ?? [],
-        ], 201)->send();
-        exit;
+        ], 201)->throwResponse();
     }
 
     // =========================>

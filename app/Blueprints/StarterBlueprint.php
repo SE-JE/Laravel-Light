@@ -22,7 +22,7 @@ class StarterBLueprint
                     'features' => '[]Feature',
                 ],
                 "controllers" => [
-                    "group-features" => "Feature/GroupFeatureController",
+                    "feature-groups" => "Feature/FeatureGroupController",
                 ],
                 'seeders' => [
                     ['Dashboard'], 
@@ -32,14 +32,14 @@ class StarterBLueprint
             [
                 "model" => "Feature",
                 "schema" => [
-                    "group_feature_id" => 'type:bigInteger foreignIdFor:FeatureGroup fillable selectable index',
+                    "feature_group_id" => 'type:bigInteger foreignIdFor:FeatureGroup fillable selectable index',
                     "code" => "type:string,3 unique required fillable searchable selectable index",
                     "name" => "type:string,20 unique required fillable searchable selectable",
                     "description" => "type:string,255 fillable searchable selectable index",
                 ],
                 'relations' => [
                     'accesses' => '[]FeatureAccess',
-                    'group' => 'FeatureGroup,group_feature_id,id',
+                    'group' => 'FeatureGroup,feature_group_id,id',
                 ],
                 "controllers" => [
                     "features" => "Feature/FeatureController",

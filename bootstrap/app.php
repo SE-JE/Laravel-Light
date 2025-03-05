@@ -16,7 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
         __DIR__.'/../app/Commands',
     ])
     ->withMiddleware(function (Middleware $middleware) {
-        //
     })
     ->withExceptions(function (Exceptions $exceptions) {
         $exceptions->renderable(function (NotFoundHttpException $e) {

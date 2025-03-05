@@ -4,7 +4,7 @@ namespace App\Blueprints;
 
 use App\Helpers\LightGenerationHelper;
 
-class BaseBLueprint
+class BaseBlueprint
 {
     use LightGenerationHelper;
     /**
