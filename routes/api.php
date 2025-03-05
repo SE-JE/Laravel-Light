@@ -11,3 +11,4 @@ Route::get('/', function () {
 Route::apiResource('group-features', \App\Http\Controllers\Feature\GroupFeatureController::class);
 Route::apiResource('features', \App\Http\Controllers\Feature\FeatureController::class);
 Route::apiResource('feature-accesses', \App\Http\Controllers\Feature\FeatureAccessController::class);
+Route::apiResource('feature-groups', \App\Http\Controllers\Feature\FeatureGroupController::class);

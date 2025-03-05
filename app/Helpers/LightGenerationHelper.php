@@ -3,6 +3,7 @@
 namespace App\Helpers;
 
 use Illuminate\Support\Str;
+use stdClass;
 
 function renderArray(array $array) {
     if(!count($array)) return;
@@ -52,6 +53,12 @@ trait LightGenerationHelper
                             $route,
                         );
                     }
+
+                    $this->documentationGeneration(
+                        $struct['controllers'], 
+                        isset($struct['schema']) ? $struct['schema'] : [],
+                        isset($struct['seeders']) ? $struct['seeders'] : [],
+                    );
                 } else {
                     $this->controllerGeneration(
                         $struct['model'],
@@ -329,5 +336,81 @@ trait LightGenerationHelper
         file_put_contents("$base_path/".$model."Seeder.php", $stub);
 
         return true;
+    }
+
+    // =========================>
+    // ## Light Documentation Generation
+    // =========================>
+    private function documentationGeneration(array $controllers, array $schema = [], array $data = []){
+        $base_path = 'storage/documentation';
+        $collectionName = getenv('APP_NAME') ?: 'API Collection';
+        
+        if (!is_dir($base_path)) {
+            mkdir($base_path, 0777, true);
+        }
+        
+        $file_path = "$base_path/$collectionName(postman).json";
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
+        
+        $folders = [];
+        foreach ($controllers as $route => $controller) {
+            $folderName = explode('/', $controller)[0];
+            $schema = $schema ?? [];
+
+            $crudOperations = [
+                ['name' => "Get All $folderName", 'method' => 'GET', 'path' => "api/$route", 'body' => new stdClass()],
+                ['name' => "Create $folderName", 'method' => 'POST', 'path' => "api/$route", 'body' => $this->extractSchema($schema)],
+                ['name' => "Update $folderName", 'method' => 'PUT', 'path' => "api/$route/{id}", 'body' => $this->extractSchema($schema)],
+                ['name' => "Delete $folderName", 'method' => 'DELETE', 'path' => "api/$route/{id}", 'body' => new stdClass()],
+            ];
+
+            $items = [];
+            foreach ($crudOperations as $endpoint) {
+                $items[] = [
+                    'name' => $endpoint['name'],
+                    'request' => [
+                        'method' => $endpoint['method'],
+                        'header' => [],
+                        'body' => [
+                            'mode' => 'raw',
+                            'raw' => json_encode($endpoint['body'], JSON_PRETTY_PRINT),
+                        ],
+                        'url' => [
+                            'raw' => '{{base_url}}/' . $endpoint['path'],
+                            'host' => ['{{base_url}}'],
+                            'path' => explode('/', $endpoint['path']),
+                        ],
+                    ],
+                ];
+            }
+
+            $folders[] = [
+                "name" => $folderName,
+                "items" => $items,
+            ];
+        }
+        
+        $collection = json_encode([
+            'info' => [
+                'name' => $collectionName,
+                'schema' => 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+            ],
+            'item' => $folders,
+        ], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        
+        file_put_contents($file_path, $collection);
+        
+        return true;
+    }
+
+    private function extractSchema(array $schema): array
+    {
+        $formattedSchema = [];
+        foreach ($schema as $key => $value) {
+            $formattedSchema[$key] = "example_$key";
+        }
+        return $formattedSchema;
     }
 }
