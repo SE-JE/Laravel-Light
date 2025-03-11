@@ -46,18 +46,21 @@ class LightAuthCommand extends Command
             'LoginRequest',
             'RegisterRequest',
             'ResetRequest',
-            'VerificationRequest',
+            'VerifyRequest',
         ];
 
         foreach ($requestNames as $initial_name) {
             if (file_exists("$basePathRequest/$initial_name.php")) {
-                $this->error('Controller is exist..!');
+                $this->error('Requests file already exists..!');
                 return 0;
             }
         }
 
         foreach ($requestNames as $initial_name) {
-            $stub = file_get_contents(resource_path("stubs/auth/with-password/$initial_name.stub"));
+            $stub = file_get_contents(resource_path("stubs/auth/with-password/requests/$initial_name.stub"));
+            if (!file_exists($basePathRequest)) {
+                mkdir($basePathRequest, 0755, true);
+            }
             file_put_contents("$basePathRequest/$initial_name.php", $stub);
         }
 
@@ -72,13 +75,16 @@ class LightAuthCommand extends Command
 
         foreach ($controllerNames as $initial_name) {
             if (file_exists("$basePathController/$initial_name.php")) {
-                $this->error('Controller is exist..!');
+                $this->error('Requests file already exists..!');
                 return 0;
             }
         }
 
         foreach ($controllerNames as $initial_name) {
-            $stub = file_get_contents(resource_path("stubs/auth/with-password/$initial_name.stub"));
+            $stub = file_get_contents(resource_path("stubs/auth/with-password/controllers/$initial_name.stub"));
+            if (!file_exists($basePathController)) {
+                mkdir($basePathController, 0755, true);
+            }
             file_put_contents("$basePathController/$initial_name.php", $stub);
         }
 
@@ -93,9 +99,8 @@ class LightAuthCommand extends Command
             return;
         }
 
-        $routeStub = file_get_contents(resource_path("stubs/auth/routes.stub"));
+        $routeStub = file_get_contents(resource_path("stubs/auth/with-password/route/auth.stub"));
         file_put_contents($basePathRoutes, $routeStub);
-
 
         /**
          * Mailer
@@ -115,20 +120,25 @@ class LightAuthCommand extends Command
         }
 
         foreach ($mailerNames as $initial_name) {
-            $stub = file_get_contents(resource_path("stubs/auth/with-password/$initial_name.stub"));
+            $stub = file_get_contents(resource_path("stubs/auth/with-password/mails/$initial_name.stub"));
+            if (!file_exists($basePathMailer)) {
+                mkdir($basePathMailer, 0755, true);
+            }
+
             file_put_contents("$basePathMailer/$initial_name.php", $stub);
         }
 
         /**
          * Generate for verification
          */
+        $this->info('TODO: Generating verification system...');
 
         /**
          * Update the files
          * bootstrap/app.php
          * app/Models/User.php
          */
-        $this->info('Updating the files...');
+        $this->info('TODO: Updating the files...');
         // $appFile = file_get_contents(base_path('bootstrap/app.php'));
 
     }
